@@ -2,12 +2,13 @@
 
 require_once 'Entity/User.php';
 require_once 'DAO/DAO.php';
+require_once 'Interface/Inserter.php';
 /**
  * Description of UserDAO
  *
  * @author Etudiant
  */
-class UserDAO extends DAO {
+class UserDAO extends DAO implements Inserter {
     
     const TABLE_NAME = 'user';
     
@@ -47,6 +48,35 @@ class UserDAO extends DAO {
 
     public function buildEntityFromData($entityData) {
         return $this->buildUserFromData($entityData);
+    }
+
+    /**
+     * Insert a new row in database from the given User
+     * @param User $user
+     */
+    public function insert($user) {
+        $sql = "INSERT INTO {$this->getTableName()} ( id, username, email, firstname, lastname ) "
+        . "VALUES (:id, :username, :email, :firstname, :lastname)";
+        
+        $query = $this->connection->prepare($sql);
+        
+        $query->bindValue(':id', $user->getId());
+        $query->bindValue(':username', $user->getUsername());
+        $query->bindValue(':email', $user->getEmail());
+        $query->bindValue(':firstname', $user->getFirstname());
+        $query->bindValue(':lastname', $user->getLastname());
+        
+        $result = $query->execute();
+        
+        $lastId = $this->connection->lastInsertId();
+        
+        $user->setId($lastId);
+        
+        return $result;
+    }
+
+    public function update($entity) {
+        
     }
 
 }

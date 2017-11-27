@@ -1,5 +1,6 @@
 <?php
 
+require_once 'PDO/PDOSingleton.php';
 /**
  * Description of DAO
  *
@@ -41,6 +42,4 @@ abstract class DAO {
     }
     
     public abstract function buildEntityFromData($entityData);
-    
-    public abstract function insert($entity);
 }
