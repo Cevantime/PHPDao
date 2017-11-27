@@ -10,6 +10,10 @@ abstract class DAO {
     protected $connection;
     protected $tableName;
     
+    public function __construct() {
+        $this->connection = PDOSingleton::getPDO();
+    }
+    
     public function getEntityBy($column, $value) {
         $entityData = $this->queryByColumn($column, $value);
         
@@ -37,4 +41,6 @@ abstract class DAO {
     }
     
     public abstract function buildEntityFromData($entityData);
+    
+    public abstract function insert($entity);
 }

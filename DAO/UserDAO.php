@@ -11,15 +11,7 @@ class UserDAO extends DAO {
     
     const TABLE_NAME = 'user';
     
-    public function __construct() {
-        // je dois initialiser mon objet pdo et mon nom de table
-        $this->tableName = self::TABLE_NAME;
-        
-        $this->connection = new PDO('mysql://host=localhost;dbname=phpdao;charset=utf8', 'root', '', array(
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-        ));
-    }
+    protected $tableName = self::TABLE_NAME;
     
     /**
      * Get a user by its username
