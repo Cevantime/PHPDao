@@ -3,6 +3,7 @@
 require_once 'Entity/User.php';
 require_once 'DAO/DAO.php';
 require_once 'Interface/Inserter.php';
+require_once 'Exception/NoIdException.php';
 /**
  * Description of UserDAO
  *
@@ -76,7 +77,23 @@ class UserDAO extends DAO implements Inserter {
     }
 
     public function update($entity) {
+        if( ! $entity->getId()){
+            throw new NoIdException($entity);
+        }
         
+        $sql = "UPDATE {$this->getTableName()} "
+        . "SET username = :username, email = :email, firstname = :firstname, lastname = :lastname "
+        . "WHERE id = :id";
+        
+        $query = $this->connection->prepare($sql);
+        
+        $query->bindValue(':id', $user->getId());
+        $query->bindValue(':username', $user->getUsername());
+        $query->bindValue(':email', $user->getEmail());
+        $query->bindValue(':firstname', $user->getFirstname());
+        $query->bindValue(':lastname', $user->getLastname());
+        
+        return $query->execute();
     }
 
 }

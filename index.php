@@ -2,6 +2,7 @@
 
 require_once 'DAO/UserDAO.php';
 require_once 'Entity/User.php';
+require_once 'Exception/NoIdException.php';
 
 // Pour accéder aux données présentes en base, j'instancie (je crée) un objet
 // de classe UserDAO
@@ -18,7 +19,13 @@ $jean->setUsername('jeannot');
 
 var_dump($jean);
 
-$userDAO->insert($jean);
+try {
+    $userDAO->update($jean);
+} catch (NoIdException $ex) {
+    $userDAO->insert($jean);
+    echo $ex->getMessage();
+    var_dump($ex->getEntity());
+}
 
 var_dump($jean);
 
